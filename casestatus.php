@@ -3,6 +3,38 @@
 require_once 'casestatus.civix.php';
 
 /**
+ * Implements hook_civicrm_post
+ *
+ * @param string $op
+ * @param string $objectName
+ * @param integer $objectId
+ * @param object $objectRef
+ *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_post
+ */
+function casestatus_civicrm_post($op, $objectName, $objectId, &$objectRef) {
+  if ($objectName == 'Case' && $op == 'create') {
+    $caseStatusConfig = CRM_Casestatus_Config::singleton();
+    $caseTypeIdParts = explode(CRM_Core_DAO::VALUE_SEPARATOR, $objectRef->case_type_id);
+    if (isset($caseTypeIdParts[1])) {
+      $defaultStatusId = $caseStatusConfig->getCaseTypeDefaultStatusId($caseTypeIdParts[1]);
+    } else {
+      $defaultStatusId = $caseStatusConfig->getCaseTypeDefaultStatusId($caseTypeIdParts[0]);
+    }
+    if ($defaultStatusId != FALSE) {
+      $caseParams = array(
+        'id' => $objectRef->id,
+        'status_id' => $defaultStatusId
+      );
+      civicrm_api3('Case', 'Create', $caseParams);
+    }
+  }
+}
+function casestatus_civicrm_buildForm($formName, &$form) {
+  if ($formName != 'CRM_Case_Form_Case' && $formName != 'CRM_Case_Form_Search' && $formName != 'CRM_Activity_Form_ActivityLinks') {
+  }
+}
+/**
  * Implements hook_civicrm_config().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_config
