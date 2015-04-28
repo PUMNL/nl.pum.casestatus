@@ -31,7 +31,8 @@ function casestatus_civicrm_post($op, $objectName, $objectId, &$objectRef) {
   }
 }
 function casestatus_civicrm_buildForm($formName, &$form) {
-  if ($formName != 'CRM_Case_Form_Case' && $formName != 'CRM_Case_Form_Search' && $formName != 'CRM_Activity_Form_ActivityLinks') {
+  if ($formName == 'CRM_Case_Form_Case') {
+    CRM_Core_Region::instance('page-body')->add(array('template' => 'CRM/Casestatus/PumCaseStatus.tpl'));
   }
 }
 /**
