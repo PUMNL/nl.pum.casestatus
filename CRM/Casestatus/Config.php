@@ -47,7 +47,7 @@ class CRM_Casestatus_Config {
       'PDV' => 'Preparation',
       'RemoteCoaching' => 'Matching',
       'Seminar' => 'Matching',
-      'TravelCase' => 'Preparation');
+      'TravelCase' => 'Open');
     foreach ($caseTypes as $caseTypeName => $caseStatusName) {
       $caseTypeId = CRM_Casestatus_Utils::getCaseTypeIdWithName($caseTypeName);
       $caseStatusId = CRM_Casestatus_Utils::getCaseStatusIdWithName($caseStatusName);
