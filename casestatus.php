@@ -29,6 +29,13 @@ function casestatus_civicrm_post($op, $objectName, $objectId, &$objectRef) {
       civicrm_api3('Case', 'Create', $caseParams);
     }
   }
+  /*
+   * issue 2857 for case type Advice en Seminar: if status is execution,
+   * generate activity debriefingExpert for 10 days from today
+   */
+  if ($objectName == "Case" && $op == "edit") {
+    CRM_Casestatus_Execution::processExecution($objectId, $objectRef->status_id);
+  }
 }
 function casestatus_civicrm_buildForm($formName, &$form) {
   if ($formName == 'CRM_Case_Form_Case') {

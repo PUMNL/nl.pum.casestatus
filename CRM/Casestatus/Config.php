@@ -17,6 +17,9 @@ class CRM_Casestatus_Config {
    * properties for default status per case type
    */
   protected $caseTypeDefaultStatusIds = array();
+  protected $debriefingActivityTypes = array();
+  protected $debriefingCaseTypes = array();
+  protected $executionCaseStatusId = null;
 
   /**
    * Method to get case type default status
@@ -31,6 +34,36 @@ class CRM_Casestatus_Config {
     } else {
       return FALSE;
     }
+  }
+
+  /**
+   * Method to get the execution case status id
+   *
+   * @return int
+   * @access public
+   */
+  public function getExecutionCaseStatusId() {
+    return $this->executionCaseStatusId;
+  }
+
+  /**
+   * Method to get the array with case types for which the debriefing activity will be generated
+   *
+   * @return array
+   * @access public
+   */
+  public function getDebriefingCaseTypes() {
+    return $this->debriefingCaseTypes;
+  }
+
+  /**
+   * Method to get the array with the activity types for debriefing per case type
+   *
+   * @return array
+   * @access public
+   */
+  public function getDebriefingActvityTypes() {
+    return $this->debriefingActivityTypes;
   }
 
   /**
@@ -52,6 +85,57 @@ class CRM_Casestatus_Config {
       $caseTypeId = CRM_Casestatus_Utils::getCaseTypeIdWithName($caseTypeName);
       $caseStatusId = CRM_Casestatus_Utils::getCaseStatusIdWithName($caseStatusName);
       $this->caseTypeDefaultStatusIds[$caseTypeId] = $caseStatusId;
+    }
+    $this->setDebriefingCaseTypes();
+    $this->setDebriefingActivityTypes();
+    $this->setExecutionCaseStatusId();
+  }
+
+  /**
+   * Method to set the execution case status id
+   *
+   * @throws Exception if error from API
+   * @access private
+   */
+  private function setExecutionCaseStatusId() {
+    $paramsOptionGroup = array('name' => 'case_status', 'return' => 'id');
+    try {
+      $optionGroupId = civicrm_api3('OptionGroup', 'Getvalue', $paramsOptionGroup);
+    } catch (CiviCRM_API3_Exception $ex) {
+      throw new Exception('Could not find option group with name case_status, '
+          . 'error from API OptionGroup Getvalue: '.$ex->getMessage());
+    }
+    $paramsOptionValue = array(
+      'option_group_id' => $optionGroupId,
+      'name' => 'Execution',
+      'return' => 'value');
+    try {
+      $this->executionCaseStatusId = civicrm_api3('OptionValue', 'Getvalue', $paramsOptionValue);
+    } catch (CiviCRM_API3_Exception $ex) {}
+  }
+
+  /**
+   * Method to set the debriefing case types (title and id)
+   *
+   * @access private
+   */
+  private function setDebriefingCaseTypes() {
+    $caseTypes = array("Advice", "Seminar");
+    foreach ($caseTypes as $caseType) {
+      $optionValue = CRM_Threepeas_Utils::getCaseTypeWithName($caseType);
+      $this->debriefingCaseTypes[$optionValue['value']] = $caseType;
+    }
+  }
+  /**
+   * Method to set the activity type ids for each debriefing activity (per case type)
+   *
+   * @access private
+   */
+  private function setDebriefingActivityTypes() {
+    foreach ($this->debriefingCaseTypes as $caseTypeId => $caseTypeName) {
+      $activityTypeName = $caseTypeName." Debriefing Expert";
+      $activityType = CRM_Threepeas_Utils::getActivityTypeWithName($activityTypeName);
+      $this->debriefingActivityTypes[$caseTypeId] = $activityType['value'];
     }
   }
 
