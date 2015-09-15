@@ -53,6 +53,7 @@ class CRM_Casestatus_Execution {
             'target_id' => $expertId,
             'assignee_id' => $expertId,
             'case_id' => $caseId,
+            'status_id' => $caseStatusConfig->getScheduledActivityStatusId(),
             'activity_date_time' => date("Y-m-d H:i:s", strtotime("+ 10 days"))
           );
           try {

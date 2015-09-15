@@ -20,6 +20,7 @@ class CRM_Casestatus_Config {
   protected $debriefingActivityTypes = array();
   protected $debriefingCaseTypes = array();
   protected $executionCaseStatusId = null;
+  protected $scheduledActivityStatusId = null;
 
   /**
    * Method to get case type default status
@@ -44,6 +45,16 @@ class CRM_Casestatus_Config {
    */
   public function getExecutionCaseStatusId() {
     return $this->executionCaseStatusId;
+  }
+
+  /**
+   * Method to get the scheduled case status id
+   *
+   * @return int
+   * @access public
+   */
+  public function getScheduledActivityStatusId() {
+    return $this->scheduledActivityStatusId;
   }
 
   /**
@@ -89,6 +100,7 @@ class CRM_Casestatus_Config {
     $this->setDebriefingCaseTypes();
     $this->setDebriefingActivityTypes();
     $this->setExecutionCaseStatusId();
+    $this->setScheduledActivityStatusId();
   }
 
   /**
@@ -111,6 +123,29 @@ class CRM_Casestatus_Config {
       'return' => 'value');
     try {
       $this->executionCaseStatusId = civicrm_api3('OptionValue', 'Getvalue', $paramsOptionValue);
+    } catch (CiviCRM_API3_Exception $ex) {}
+  }
+
+  /**
+   * Method to set the execution case status id
+   *
+   * @throws Exception if error from API
+   * @access private
+   */
+  private function setScheduledActivityStatusId() {
+    $paramsOptionGroup = array('name' => 'activity_status', 'return' => 'id');
+    try {
+      $optionGroupId = civicrm_api3('OptionGroup', 'Getvalue', $paramsOptionGroup);
+    } catch (CiviCRM_API3_Exception $ex) {
+      throw new Exception('Could not find option group with name activity_status, '
+        . 'error from API OptionGroup Getvalue: '.$ex->getMessage());
+    }
+    $paramsOptionValue = array(
+      'option_group_id' => $optionGroupId,
+      'name' => 'Scheduled',
+      'return' => 'value');
+    try {
+      $this->scheduledActivityStatusId = civicrm_api3('OptionValue', 'Getvalue', $paramsOptionValue);
     } catch (CiviCRM_API3_Exception $ex) {}
   }
 
