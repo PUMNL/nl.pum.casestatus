@@ -37,6 +37,21 @@ function casestatus_civicrm_post($op, $objectName, $objectId, &$objectRef) {
     CRM_Casestatus_Execution::processExecution($objectId, $objectRef->status_id);
   }
 }
+
+/**
+ * Implements hook_civicrm_alterAPIPermissions
+ *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_alterAPIPermissions
+ */
+function casestatus_civicrm_alterAPIPermissions($entity, $action, &$params, &$permissions) {
+  $permissions['pum_case_status']['get'] = array('access CiviCRM');
+}
+
+/**
+ * Implements hook_civicrm_buildForm
+ *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_buildForm
+ */
 function casestatus_civicrm_buildForm($formName, &$form) {
   if ($formName == 'CRM_Case_Form_Case') {
     CRM_Core_Region::instance('page-body')->add(array('template' => 'CRM/Casestatus/PumCaseStatus.tpl'));

@@ -25,16 +25,11 @@ class CRM_Casestatus_Config {
   /**
    * Method to get case type default status
    *
-   * @param int $caseTypeId
-   * @return int|bool
+   * @return array
    * @access public
    */
-  public function getCaseTypeDefaultStatusId($caseTypeId) {
-    if (isset($this->caseTypeDefaultStatusIds[$caseTypeId])) {
-      return $this->caseTypeDefaultStatusIds[$caseTypeId];
-    } else {
-      return FALSE;
-    }
+  public function getDefaultCaseStatus($params) {
+    return $this->caseTypeDefaultStatusIds;
   }
 
   /**
