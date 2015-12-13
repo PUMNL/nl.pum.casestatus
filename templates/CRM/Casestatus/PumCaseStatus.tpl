@@ -4,7 +4,6 @@
       var caseTypeId = cj('#case_type_id').val();
       CRM.api('PumCaseStatus', 'Get', {"check_permissions":""}, {
         success: function(data){
-          console.log(data.values[caseTypeId]['status_id']);
           cj('#status_id').val(data.values[caseTypeId]['status_id']);
         }
       });
@@ -13,7 +12,6 @@
       var caseTypeId = cj('#case_type_id').val();
       CRM.api('PumCaseStatus', 'Get', {"check_permissions":""}, {
         success: function(data){
-          console.log(data.values[caseTypeId]['status_id']);
           cj('#status_id').val(data.values[caseTypeId]['status_id']);
         }
       });
