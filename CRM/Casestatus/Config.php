@@ -150,7 +150,7 @@ class CRM_Casestatus_Config {
    * @access private
    */
   private function setDebriefingCaseTypes() {
-    $caseTypes = array("Advice", "Seminar");
+    $caseTypes = array("Advice", "Seminar", "Business");
     foreach ($caseTypes as $caseType) {
       $optionValue = CRM_Threepeas_Utils::getCaseTypeWithName($caseType);
       $this->debriefingCaseTypes[$optionValue['value']] = $caseType;
