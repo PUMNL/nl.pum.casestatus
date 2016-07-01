@@ -17,9 +17,11 @@ function casestatus_civicrm_post($op, $objectName, $objectId, &$objectRef) {
     $caseStatusConfig = CRM_Casestatus_Config::singleton();
     $caseTypeStatus = $caseStatusConfig->getDefaultCaseStatus();
     $caseTypeIdParts = explode(CRM_Core_DAO::VALUE_SEPARATOR, $objectRef->case_type_id);
-    if (isset($caseTypeIdParts[1])) {
+    $defaultStatusId = false;
+
+    if (isset($caseTypeIdParts[1]) && isset($caseTypeStatus[$caseTypeIdParts[1]])) {
       $defaultStatusId = $caseTypeStatus[$caseTypeIdParts[1]];
-    } else {
+    } elseif (isset($caseTypeStatus[$caseTypeIdParts[0]])) {
       $defaultStatusId = $caseTypeStatus[$caseTypeIdParts[0]];
     }
     if ($defaultStatusId != FALSE) {

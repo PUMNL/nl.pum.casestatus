@@ -28,7 +28,7 @@ class CRM_Casestatus_Config {
    * @return array
    * @access public
    */
-  public function getDefaultCaseStatus($params) {
+  public function getDefaultCaseStatus() {
     return $this->caseTypeDefaultStatusIds;
   }
 
