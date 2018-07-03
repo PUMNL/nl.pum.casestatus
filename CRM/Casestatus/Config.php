@@ -84,6 +84,7 @@ class CRM_Casestatus_Config {
       'CTM' => 'Preparation',
       'Grant' => 'Submitted',
       'PDV' => 'Preparation',
+      'FactFinding' => 'Preparation',
       'RemoteCoaching' => 'Matching',
       'Seminar' => 'Matching',
       'TravelCase' => 'Open');
